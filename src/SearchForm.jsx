@@ -1,4 +1,6 @@
+// SearchForm.js
 import React, { useState } from 'react';
+import { TextField, Button, Box } from '@mui/material';
 
 function SearchForm({ onSearch }) {
   const [ingredients, setIngredients] = useState('');
@@ -10,13 +12,24 @@ function SearchForm({ onSearch }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Enter ingredients separated by commas"
-        value={ingredients}
-        onChange={(e) => setIngredients(e.target.value)}
-      />
-      <button type="submit">Search</button>
+      <Box display="flex" alignItems="center">
+        <TextField
+          label="Enter ingredients separated by commas"
+          value={ingredients}
+          onChange={(e) => setIngredients(e.target.value)}
+          fullWidth
+          margin="normal"
+          variant="outlined"
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ ml: 2 }}
+        >
+          Search
+        </Button>
+      </Box>
     </form>
   );
 }

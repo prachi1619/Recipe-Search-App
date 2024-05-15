@@ -1,41 +1,45 @@
+// App.js
 import React, { useState } from 'react';
+import { Container, Box, Typography } from '@mui/material';
 import SearchForm from './SearchForm';
 import RecipeList from './RecipeList';
 import recipes from './recipes.json';
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState(''); 
+  const [searchTerm, setSearchTerm] = useState('');
   const [filteredRecipes, setFilteredRecipes] = useState(recipes);
 
   const handleSearch = (ingredients) => {
     setSearchTerm(ingredients);
-    const filtered = recipes.filter((recipe) =>
-      recipe.ingredients.some((ingredient) =>
-        ingredients.toLowerCase().includes(ingredient.toLowerCase())
-      )
-    );
+    const filtered = recipes.filter((recipe) => {
+      const recipeIngredients = recipe.ingredients.map((ingredient) =>
+        ingredient.toLowerCase()
+      );
+      const searchIngredients = ingredients.toLowerCase().split(', ');
+      const result = searchIngredients.every((searchIngredient) =>
+        recipeIngredients.some((recipeIngredient) =>
+          recipeIngredient.includes(searchIngredient)
+        )
+      );
+      return result;
+    });
     setFilteredRecipes(filtered);
   };
 
   return (
-    <div>
-      <SearchForm onSearch={handleSearch} />
+    <Container maxWidth="lg">
+      <Box mt={4} mb={6}>
+        <Typography variant="h4" component="h1" align="center" gutterBottom>
+          Recipe Search App
+        </Typography>
+        <Typography variant="body1" align="center" color="text.secondary" gutterBottom>
+          Find delicious recipes by entering ingredients
+        </Typography>
+        <SearchForm onSearch={handleSearch} />
+      </Box>
       <RecipeList recipes={filteredRecipes} searchTerm={searchTerm} />
-    </div>
+    </Container>
   );
 }
 
 export default App;
-
-//Explanation:
-// In the App component, we have two pieces of state: searchTerm and filteredRecipes. searchTerm is used to store the search term entered by the user, and filteredRecipes is used to store the recipes that match the search term.
-
-// The handleSearch function is called when the user submits the search form. It filters the recipes based on the search term and updates the filteredRecipes state with the filtered recipes.
-
-// The App component renders the SearchForm and RecipeList components. The SearchForm component is used to allow the user to enter the search term, and the RecipeList component displays the list of recipes that match the search term.
-
-// The RecipeList component receives the filteredRecipes and searchTerm as props and renders the RecipeCard component for each recipe in the filteredRecipes array.
-
-// The RecipeCard component is responsible for rendering the details of a single recipe, including the title, image, description, ingredients, and instructions.
-
-// Overall, the App component manages the search functionality and passes the filtered recipes to the RecipeList component for rendering. The RecipeList component then renders the RecipeCard component for each recipe in the filteredRecipes array.
